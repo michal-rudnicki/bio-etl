@@ -2,9 +2,9 @@ FROM python:3.11
 
 WORKDIR /app
 
-COPY worker.py .
+COPY . .
 
 # Instalujemy wymagane biblioteki
-RUN pip install biopython psycopg2-binary
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "worker.py"]
+CMD ["python", "main.py"]
