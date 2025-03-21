@@ -1,0 +1,6 @@
+*.pyc
+.env
+*.log
+.DS_Store
+.idea/
+*.iml

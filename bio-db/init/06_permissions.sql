@@ -1,0 +1,15 @@
+CREATE USER worker WITH PASSWORD 'worker';
+
+GRANT CONNECT ON DATABASE "bio-db" TO worker;
+GRANT USAGE ON SCHEMA public TO worker;
+
+GRANT SELECT, INSERT, UPDATE ON jobs TO worker;
+GRANT SELECT, INSERT ON viruses TO worker;
+GRANT SELECT, INSERT ON sequences TO worker;
+GRANT SELECT, INSERT ON taxonomy TO worker;
+GRANT SELECT, INSERT ON virus_hosts TO worker;
+
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO worker;
+
+GRANT EXECUTE ON FUNCTION gc_content(TEXT) TO worker;
+GRANT EXECUTE ON FUNCTION set_created_by() TO worker;
