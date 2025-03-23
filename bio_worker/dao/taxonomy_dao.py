@@ -1,70 +1,28 @@
-import os
-from typing import List, Optional, Tuple
-
+from typing import List, Tuple, Optional
 import psycopg2
-from Bio import Entrez
-
-Entrez.email = os.environ.get("EMAIL", "default@example.com")
 
 
 class TaxonomyDAO:
     @staticmethod
-    def fetch_lineage(name: str) -> List[Tuple[str, str]]:
-        try:
-            handle = Entrez.esearch(
-                db="taxonomy", term=name + "[Organism]", retmode="xml"
-            )
-            record = Entrez.read(handle)
-            handle.close()
-            if not record["IdList"]:
-                print(f"[Taxonomy] ⚠️ No taxonomy found for: {name}")
-                return []
-
-            tax_id = record["IdList"][0]
-            handle = Entrez.efetch(db="taxonomy", id=tax_id, retmode="xml")
-            data = Entrez.read(handle)
-            handle.close()
-
-            lineage = data[0].get("LineageEx", [])
-            lineage_data = [
-                (item["ScientificName"], item["Rank"]) for item in lineage
-            ]
-            lineage_data.append((data[0]["ScientificName"], data[0]["Rank"]))
-            return lineage_data
-        except Exception as e:
-            print(f"[Taxonomy] ❌ Error: {e}")
-            return []
-
-    @staticmethod
-    def insert(
-        conn: psycopg2.extensions.connection, lineage: List[Tuple[str, str]]
-    ) -> Optional[int]:
+    def insert(conn: psycopg2.extensions.connection, lineage: List[Tuple[str, str]]) -> Optional[int]:
         cur = conn.cursor()
         parent_id = None
 
         for name, rank in lineage:
-            cur.execute(
-                """
+            cur.execute("""
                 SELECT id FROM taxonomy
-                WHERE name = %s
-                AND rank = %s
-                AND parent_id IS NOT DISTINCT FROM %s
-            """,
-                (name, rank, parent_id),
-            )
+                WHERE name = %s AND rank = %s AND parent_id IS NOT DISTINCT FROM %s
+            """, (name, rank, parent_id))
             row = cur.fetchone()
 
             if row:
                 tax_id = row[0]
             else:
-                cur.execute(
-                    """
+                cur.execute("""
                     INSERT INTO taxonomy (name, rank, parent_id)
                     VALUES (%s, %s, %s)
                     RETURNING id
-                """,
-                    (name, rank, parent_id),
-                )
+                """, (name, rank, parent_id))
                 tax_id = cur.fetchone()[0]
 
             parent_id = tax_id
