@@ -1,7 +1,7 @@
 services:
   bio-db:
-    build: ./bio-db
-    container_name: bio-db
+    build: bio_db
+    container_name: bio_db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -9,14 +9,15 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./bio-db/init:/docker-entrypoint-initdb.d
+      - ./bio_db/init:/docker-entrypoint-initdb.d
 
   bio-worker:
-    build: ./bio-worker
-    container_name: bio-worker
+    build: bio_worker
+    container_name: bio_worker
     depends_on:
       - bio-db
     environment:
+      PYTHONPATH: /app
       DB_HOST: ${DB_HOST}
       DB_NAME: ${POSTGRES_DB}
       DB_USER: ${DB_USER}
