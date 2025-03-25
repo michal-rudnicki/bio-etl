@@ -1,9 +1,4 @@
-[tool.mypy]
-python_version = "3.11"
-warn_unused_configs = true
-disallow_untyped_defs = true
-check_untyped_defs = true
-ignore_missing_imports = true
+[tool.pylint]
 
 [tool.black]
 line-length = 79

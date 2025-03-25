@@ -1,8 +1,11 @@
+astroid==3.3.9
 biopython==1.85
 black==25.1.0
 cfgv==3.4.0
 click==8.1.8
+dill==0.3.9
 distlib==0.3.9
+Faker==37.0.2
 filelock==3.18.0
 flake8==7.1.2
 identify==2.6.9
@@ -21,9 +24,12 @@ pre_commit==4.2.0
 psycopg2-binary==2.9.10
 pycodestyle==2.12.1
 pyflakes==3.2.0
+pylint==3.3.6
 pytest==8.3.5
 PyYAML==6.0.2
 setuptools==75.8.0
+tomlkit==0.13.2
 typing_extensions==4.12.2
+tzdata==2025.2
 virtualenv==20.29.3
 wheel==0.45.1

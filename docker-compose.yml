@@ -2,6 +2,8 @@ services:
   bio-db:
     build: bio_db
     container_name: bio_db
+    image: postgres:16
+    restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -12,14 +14,15 @@ services:
       - ./bio_db/init:/docker-entrypoint-initdb.d
 
   bio-worker:
-    build: bio_worker
+    build:
+      context: ./bio_worker
     container_name: bio_worker
     depends_on:
       - bio-db
     environment:
       PYTHONPATH: /app
-      DB_HOST: ${DB_HOST}
+      DB_HOST: ${WORKER_DB_HOST}
       DB_NAME: ${POSTGRES_DB}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
+      DB_USER: ${WORKER_DB_USER}
+      DB_PASS: ${WORKER_DB_PASS}
       EMAIL: ${EMAIL}

@@ -1,10 +1,16 @@
+"""Moduł uruchamiający główną pętlę workera
+do przetwarzania zadań z bazy danych."""
+
 import time
 
-from db import get_next_job, wait_for_postgres
-from jobs.job_processor import process_virus_job
+from bio_worker.db import get_next_job, wait_for_postgres
+from bio_worker.jobs.job_processor import process_virus_job
 
 
 def main() -> None:
+    """
+    Główna pętla przetwarzająca zadania typu 'fetch_ncbi'.
+    """
     conn = wait_for_postgres()
 
     while True:
