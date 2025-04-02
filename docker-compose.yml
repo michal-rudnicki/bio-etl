@@ -19,6 +19,8 @@ services:
     container_name: bio_worker
     depends_on:
       - bio-db
+    volumes:
+      - ./bio_worker:/app
     environment:
       PYTHONPATH: /app
       DB_HOST: ${WORKER_DB_HOST}

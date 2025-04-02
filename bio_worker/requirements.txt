@@ -1,2 +1,4 @@
 biopython
 psycopg2-binary
+SQLAlchemy
+python-dotenv

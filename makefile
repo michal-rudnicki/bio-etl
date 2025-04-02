@@ -1,16 +1,20 @@
 # === Ścieżki ===
 APP_DIR=bio_worker
+ENV_FILE=bio_worker/.env
 
 # === Docker ===
 up:
-	docker-compose up --build
+	d	test -f $(ENV_FILE)|| (echo "Brak pliku .env! Utwórz go najpierw."; exit 1)
+	docker-compose --env-file $(ENV_FILE) up --build
 
 down:
-	docker-compose down
+	test -f $(ENV_FILE) || (echo "Brak pliku .env! Utwórz go najpierw."; exit 1)
+	docker-compose --env-file $(ENV_FILE) down -v
 
 restart:
-	docker-compose down -v
-	docker-compose --env-file .env up --build
+	test -f $(ENV_FILE) || (echo "Brak pliku .env! Utwórz go najpierw."; exit 1)
+	docker-compose --env-file $(ENV_FILE) down -v
+	docker-compose --env-file $(ENV_FILE) up --build
 
 logs:
 	docker-compose logs -f
@@ -27,7 +31,7 @@ lint:
 
 # === Testy lokalne ===
 test:
-	set -a && source .env && set +a && pytest bio_worker/bio_worker/tests
+	set -a && source $(ENV_FILE) && set +a && pytest bio_worker/bio_worker/tests
 
 # === Wszystko razem ===
 check: format lint test
@@ -35,3 +39,6 @@ check: format lint test
 # === Czyszczenie (opcjonalnie) ===
 clean:
 	docker system prune -af
+
+pre-commit:
+	pre-commit run --all-files
