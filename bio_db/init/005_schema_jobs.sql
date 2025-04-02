@@ -1,4 +1,4 @@
--- 040_schema_jobs.sql
+-- 005_schema_jobs.sql
 DO $$ BEGIN RAISE NOTICE 'Tworzę tabelę jobs'; END; $$;
 CREATE TABLE IF NOT EXISTS jobs (
     job_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     input_params JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     finished_at TIMESTAMP,
-    status_message TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    status_message TEXT
 );
 DO $$ BEGIN RAISE NOTICE 'Tworzę indeks idx_jobs_created_at'; END; $$;
 CREATE INDEX IF NOT EXISTS idx_jobs_created_at ON jobs(created_at);

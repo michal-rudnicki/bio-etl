@@ -26,5 +26,5 @@ services:
       DB_HOST: ${WORKER_DB_HOST}
       DB_NAME: ${POSTGRES_DB}
       DB_USER: ${WORKER_DB_USER}
-      DB_PASS: ${WORKER_DB_PASS}
+      DB_PASS: ${WORKER_DB_PASSWORD}
       EMAIL: ${EMAIL}
